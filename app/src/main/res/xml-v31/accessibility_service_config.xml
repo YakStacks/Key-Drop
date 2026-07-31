@@ -5,5 +5,5 @@
     android:accessibilityFlags="flagRetrieveInteractiveWindows"
     android:canRetrieveWindowContent="true"
     android:description="@string/service_description"
-    android:isAccessibilityTool="true"
+    android:isAccessibilityTool="false"
     android:notificationTimeout="0" />

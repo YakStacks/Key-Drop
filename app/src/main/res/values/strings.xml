@@ -9,6 +9,10 @@
     <string name="status_on">KeyDrop is ON</string>
     <string name="status_off">KeyDrop is OFF</string>
     <string name="open_settings">Open Accessibility Settings</string>
+    <string name="accessibility_disclosure_title">Before you enable KeyDrop</string>
+    <string name="accessibility_disclosure_message">KeyDrop uses Android\'s Accessibility Service to detect when the on-screen keyboard is visible and show the Hide Keyboard button.\n\nAndroid gives KeyDrop access to information about on-screen windows. KeyDrop checks only whether a keyboard window exists. It does not read or store what you type, inspect screen content, take screenshots, collect data, or share data.\n\nIf you agree, Android Accessibility Settings will open. You decide there whether to enable KeyDrop, and you can turn it off at any time.</string>
+    <string name="accessibility_disclosure_agree">Agree</string>
+    <string name="accessibility_disclosure_decline">Not now</string>
     <string name="how_to_title">Set up in three steps</string>
     <string name="how_to_body">1. Open Accessibility Settings.\n2. Select KeyDrop and turn it on.\n3. Return here and tap the test field below.\n\nDrag the blue button to save its position. Tap it to dismiss the keyboard.</string>
     <string name="test_hint">Tap here to test KeyDrop</string>

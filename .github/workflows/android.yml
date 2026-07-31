@@ -27,6 +27,14 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Run accessibility consent tests
+        run: |
+          mkdir -p build/consent-tests
+          javac -d build/consent-tests \
+            app/src/main/java/com/yakstacks/keydrop/AccessibilityConsentFlow.java \
+            app/src/test/java/com/yakstacks/keydrop/AccessibilityConsentFlowTest.java
+          java -cp build/consent-tests com.yakstacks.keydrop.AccessibilityConsentFlowTest
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
 

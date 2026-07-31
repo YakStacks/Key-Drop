@@ -20,7 +20,7 @@ the keyboard when the button is tapped.
 ## Build
 
 Open this directory in Android Studio, allow Gradle sync, and run the `app`
-configuration on an Android 7.0+ device. The project expects Android SDK 35 and
+configuration on an Android 7.0+ device. The project expects Android SDK 36 and
 JDK 17. From a terminal, use `gradlew.bat assembleDebug` on Windows or
 `./gradlew assembleDebug` on macOS/Linux.
 
@@ -33,13 +33,15 @@ test installs. It must not be distributed as a production release; see
 
 1. Open KeyDrop.
 2. Tap **Open Accessibility Settings**.
-3. Choose **KeyDrop floating button** and enable the service.
-4. Return to KeyDrop and tap the test field.
+3. Read the Accessibility Service disclosure and choose **Agree** or **Not now**.
+4. After agreeing, choose **KeyDrop floating button** and enable the service.
+5. Return to KeyDrop and tap the test field.
 
 Android requires a prominent accessibility warning because the MVP uses an
 accessibility overlay, interactive-window metadata, and the global Back action.
 KeyDrop requests window access only to identify `TYPE_INPUT_METHOD`; its code does
-not traverse view trees or read text.
+not traverse view trees or read text. KeyDrop is declared as a general utility,
+not as a disability-focused accessibility tool.
 
 See [TESTING.md](TESTING.md) for device coverage and known limitations.
 
