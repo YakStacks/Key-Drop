@@ -44,7 +44,5 @@ android {
         // API 37 is still a preview target. Stay on the latest stable API (36)
         // until Android 17 is final and KeyDrop has completed device testing on it.
         disable 'OldTargetApi'
-        textReport true
-        textOutput 'stdout'
     }
 }
