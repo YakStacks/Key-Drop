@@ -52,4 +52,7 @@ testing obligations, and [PRIVACY.md](PRIVACY.md) for the data-handling statemen
 
 ## License
 
-Licensed under the [Apache License 2.0](LICENSE).
+Copyright © 2026 YakStacks.
+
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for the
+project copyright notice.
