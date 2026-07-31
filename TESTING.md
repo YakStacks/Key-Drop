@@ -11,6 +11,10 @@ OEM Android builds and third-party keyboards differ.
 - Confirm the button disappears before a second tap could navigate Back.
 - Confirm dragging persists across service and app restarts.
 - Confirm hardware-keyboard and voice-input states do not leave a stale overlay.
+- On a clean install, confirm **Not now** leaves the user in KeyDrop and opens no
+  Android settings.
+- On a clean install, confirm **Agree** opens Accessibility Settings and the
+  disclosure is not repeated on later settings-button taps.
 
 Known MVP limitations:
 
