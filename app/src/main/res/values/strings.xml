@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KeyDrop</string>
+    <string name="app_icon">KeyDrop icon</string>
+    <string name="tagline">Keep your keyboard. Add the button Android forgot.</string>
+    <string name="service_name">KeyDrop floating button</string>
+    <string name="service_description">Shows a movable hide-keyboard button while an on-screen keyboard is visible.</string>
+    <string name="hide_keyboard">Hide keyboard</string>
+    <string name="status_on">KeyDrop is ON</string>
+    <string name="status_off">KeyDrop is OFF</string>
+    <string name="open_settings">Open Accessibility Settings</string>
+    <string name="how_to_title">Set up in three steps</string>
+    <string name="how_to_body">1. Open Accessibility Settings.\n2. Select KeyDrop and turn it on.\n3. Return here and tap the test field below.\n\nDrag the blue button to save its position. Tap it to dismiss the keyboard.</string>
+    <string name="test_hint">Tap here to test KeyDrop</string>
+    <string name="privacy_note">Private by design: no internet permission, analytics, account, or cloud service. Android grants window access so KeyDrop can detect the keyboard, but KeyDrop never reads or stores typed text.</string>
+</resources>

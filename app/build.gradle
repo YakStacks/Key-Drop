@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.yakstacks.keydrop'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.yakstacks.keydrop'
+        minSdk 24
+        targetSdk 36
+        versionCode 3
+        versionName '1.0.2-mvp'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            debuggable false
+            jniDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        hardenedTest {
+            initWith release
+            signingConfig signingConfigs.debug
+            versionNameSuffix '-test'
+            matchingFallbacks = ['release']
+        }
+    }
+
+    lint {
+        abortOnError true
+        warningsAsErrors true
+        // API 37 is still a preview target. Stay on the latest stable API (36)
+        // until Android 17 is final and KeyDrop has completed device testing on it.
+        disable 'OldTargetApi'
+    }
+}
