@@ -8,8 +8,9 @@
 - No runtime third-party dependencies, native libraries, WebView, dynamic code,
   IPC API, content provider, broadcast receiver, or deep link. JUnit is a
   test-only dependency and is not part of any shipped artifact.
-- Backups are disabled; the only persisted data is the button's edge and relative
-  vertical position in app-private `SharedPreferences`.
+- Backups are disabled; the only persisted data is the button's edge, relative
+  vertical position, and accessibility-disclosure consent state in app-private
+  `SharedPreferences`.
 - Cleartext networking is denied as defense in depth.
 - The accessibility service is protected by Android's signature-level
   `BIND_ACCESSIBILITY_SERVICE` permission.
@@ -42,6 +43,15 @@ signing material enters the repository or the build logs. Publishing jobs pass
 material is missing rather than emitting an unsigned artifact. The release
 workflow additionally runs `apksigner verify --print-certs` on the built APK.
 [RELEASING.md](RELEASING.md) covers key generation, backup, and Play App Signing.
+
+## Reporting a vulnerability
+
+Send security reports privately to **James@yakstacks.com** with `KeyDrop security` in
+the subject. Include the affected version, reproduction steps, impact, and any
+suggested mitigation. Do not include sensitive findings in a public issue.
+
+YakStacks will acknowledge a report within seven days, investigate it, and coordinate
+disclosure and a fix when the report is confirmed.
 
 ## Residual test requirements
 

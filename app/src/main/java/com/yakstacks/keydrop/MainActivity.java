@@ -30,6 +30,8 @@ public final class MainActivity extends Activity {
         statusView = findViewById(R.id.status);
         Button settingsButton = findViewById(R.id.open_accessibility_settings);
         settingsButton.setOnClickListener(view -> requestAccessibilitySetup());
+        Button privacyButton = findViewById(R.id.open_privacy_policy);
+        privacyButton.setOnClickListener(view -> showPrivacyPolicy());
     }
 
     @Override
@@ -80,6 +82,14 @@ public final class MainActivity extends Activity {
                         (dialog, which) -> respondToDisclosure(true))
                 .setNegativeButton(R.string.accessibility_disclosure_decline,
                         (dialog, which) -> respondToDisclosure(false))
+                .show();
+    }
+
+    private void showPrivacyPolicy() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.privacy_policy_title)
+                .setMessage(R.string.privacy_policy_message)
+                .setPositiveButton(R.string.close, null)
                 .show();
     }
 

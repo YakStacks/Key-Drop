@@ -43,8 +43,8 @@ PRIVATE BY DESIGN
 
 • No internet permission. KeyDrop literally cannot send anything anywhere.
 • No analytics, no advertising, no account, no cloud.
-• The only thing KeyDrop saves is the position you dragged the button to, stored on your
-  device.
+• KeyDrop saves only the button position and whether you accepted the setup disclosure.
+  Both stay in private storage on your device.
 
 ABOUT THE ACCESSIBILITY PERMISSION
 
@@ -68,8 +68,10 @@ GOOD TO KNOW
 • The button uses Android's global Back action, which follows whatever the app in front does
   with Back.
 
-Open source under the Apache License 2.0.
 ```
+
+If the repository is public before the listing is submitted, append: `Open source under
+the Apache License 2.0.` Do not make that claim while the source repository is private.
 
 ## Assets
 

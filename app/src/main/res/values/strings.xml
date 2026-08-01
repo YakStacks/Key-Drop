@@ -13,9 +13,13 @@
     <string name="accessibility_disclosure_message">KeyDrop uses Android\'s Accessibility Service to detect when the on-screen keyboard is visible and show the Hide Keyboard button.\n\nAndroid gives KeyDrop access to information about on-screen windows. KeyDrop checks only whether a keyboard window exists. It does not read or store what you type, inspect screen content, take screenshots, collect data, or share data.\n\nIf you agree, Android Accessibility Settings will open. You decide there whether to enable KeyDrop, and you can turn it off at any time.</string>
     <string name="accessibility_disclosure_agree">Agree</string>
     <string name="accessibility_disclosure_decline">Not now</string>
-    <string name="how_to_title">Set up in three steps</string>
-    <string name="how_to_body">1. Open Accessibility Settings.\n2. Select KeyDrop and turn it on.\n3. Return here and tap the test field below.\n\nDrag the blue button to save its position. Tap it to dismiss the keyboard.</string>
+    <string name="how_to_title">Set up in four steps</string>
+    <string name="how_to_body">1. Tap Open Accessibility Settings.\n2. Read the KeyDrop disclosure and choose Agree.\n3. Select KeyDrop and turn it on.\n4. Return here and tap the test field below.\n\nDrag the blue button to save its position. Tap it to dismiss the keyboard.</string>
     <string name="test_hint">Tap here to test KeyDrop</string>
     <string name="accessibility_settings_unavailable">This device has no Accessibility Settings screen. Open Settings and enable KeyDrop manually.</string>
     <string name="privacy_note">Private by design: no internet permission, analytics, account, or cloud service. Android grants window access so KeyDrop can detect the keyboard, but KeyDrop never reads or stores typed text.</string>
+    <string name="open_privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_title">KeyDrop Privacy Policy</string>
+    <string name="privacy_policy_message">Effective August 1, 2026\n\nKeyDrop is developed by YakStacks.\n\nACCESSIBILITY ACCESS\nAndroid grants KeyDrop access to information about on-screen windows. KeyDrop checks only whether a keyboard window exists. It does not traverse accessibility node trees, inspect fields, read or store typed text, take screenshots, or record input.\n\nDATA STORED ON THIS DEVICE\nKeyDrop stores the floating button\'s screen edge, relative vertical position, and whether you accepted the accessibility disclosure. These preferences stay in KeyDrop\'s private app storage.\n\nCOLLECTION AND SHARING\nKeyDrop has no internet permission, analytics, advertising, account, cloud service, or runtime third-party software. It does not transmit, sell, or share user or device data.\n\nRETENTION AND DELETION\nThe local preferences remain until you clear KeyDrop\'s app storage or uninstall KeyDrop. Either action deletes them.\n\nCONTACT\nPrivacy questions may be sent to James@yakstacks.com.</string>
+    <string name="close">Close</string>
 </resources>
