@@ -2,6 +2,36 @@ plugins {
     id 'com.android.application'
 }
 
+// Release signing material never lives in the repository. Supply it either through a local
+// keystore.properties (git-ignored) or through environment variables in CI. See RELEASING.md.
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
+def signingValue = { String propertyName, String environmentName ->
+    def value = keystoreProperties.getProperty(propertyName) ?: System.getenv(environmentName)
+    return value == null || value.trim().isEmpty() ? null : value.trim()
+}
+
+def releaseStoreFile = signingValue('storeFile', 'KEYDROP_KEYSTORE_FILE')
+def releaseStorePassword = signingValue('storePassword', 'KEYDROP_KEYSTORE_PASSWORD')
+def releaseKeyAlias = signingValue('keyAlias', 'KEYDROP_KEY_ALIAS')
+def releaseKeyPassword = signingValue('keyPassword', 'KEYDROP_KEY_PASSWORD')
+def hasReleaseSigning = releaseStoreFile != null && releaseStorePassword != null &&
+        releaseKeyAlias != null && releaseKeyPassword != null
+
+// Publishing jobs pass -PrequireReleaseSigning=true so an unsigned artifact can never be shipped.
+def requireReleaseSigning = project.hasProperty('requireReleaseSigning') &&
+        Boolean.parseBoolean(project.property('requireReleaseSigning').toString())
+if (requireReleaseSigning && !hasReleaseSigning) {
+    throw new GradleException('Release signing was required but no complete keystore ' +
+            'configuration was found. Set storeFile/storePassword/keyAlias/keyPassword in ' +
+            'keystore.properties or the KEYDROP_KEYSTORE_FILE, KEYDROP_KEYSTORE_PASSWORD, ' +
+            'KEYDROP_KEY_ALIAS, and KEYDROP_KEY_PASSWORD environment variables. See RELEASING.md.')
+}
+
 android {
     namespace 'com.yakstacks.keydrop'
     compileSdk 36
@@ -10,13 +40,29 @@ android {
         applicationId 'com.yakstacks.keydrop'
         minSdk 24
         targetSdk 36
-        versionCode 4
-        versionName '1.0.3-mvp'
+        versionCode 5
+        versionName '1.0.0'
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                // Relative paths resolve from the repository root.
+                storeFile rootProject.file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+                // The modern APK signature schemes are requested explicitly. The legacy JAR
+                // signature is left at its default because the App Bundle relies on it.
+                enableV2Signing true
+                enableV3Signing true
+            }
+        }
     }
 
     buildTypes {
@@ -29,12 +75,23 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
         }
         hardenedTest {
             initWith release
             signingConfig signingConfigs.debug
             versionNameSuffix '-test'
             matchingFallbacks = ['release']
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            testLogging {
+                events 'passed', 'skipped', 'failed'
+            }
         }
     }
 
@@ -45,4 +102,14 @@ android {
         // until Android 17 is final and KeyDrop has completed device testing on it.
         disable 'OldTargetApi'
     }
+}
+
+base {
+    // Names the outputs keydrop-<version>-<variant>.apk/.aab for the release assets.
+    archivesName.set("keydrop-${android.defaultConfig.versionName}".toString())
+}
+
+dependencies {
+    // Test-only. KeyDrop still ships with no runtime third-party dependency.
+    testImplementation 'junit:junit:4.13.2'
 }
