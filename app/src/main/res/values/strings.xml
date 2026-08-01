@@ -16,5 +16,6 @@
     <string name="how_to_title">Set up in three steps</string>
     <string name="how_to_body">1. Open Accessibility Settings.\n2. Select KeyDrop and turn it on.\n3. Return here and tap the test field below.\n\nDrag the blue button to save its position. Tap it to dismiss the keyboard.</string>
     <string name="test_hint">Tap here to test KeyDrop</string>
+    <string name="accessibility_settings_unavailable">This device has no Accessibility Settings screen. Open Settings and enable KeyDrop manually.</string>
     <string name="privacy_note">Private by design: no internet permission, analytics, account, or cloud service. Android grants window access so KeyDrop can detect the keyboard, but KeyDrop never reads or stores typed text.</string>
 </resources>

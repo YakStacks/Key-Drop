@@ -2,7 +2,7 @@
 
 KeyDrop has no internet permission, analytics, advertising SDK, user account, or
 cloud component. Cleartext traffic is denied and backups are disabled. Preferences
-contain only the floating button's edge and Y position.
+contain only the floating button's edge and its relative vertical position.
 
 Android requires `canRetrieveWindowContent="true"` before an accessibility service
 may call `getWindows()` or receive window-change events. KeyDrop requests that

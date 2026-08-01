@@ -2,12 +2,14 @@
 
 ## Security properties
 
-- No `INTERNET` or `ACCESS_NETWORK_STATE` permission; final APK permissions are
-  verified during the release audit.
+- No `INTERNET` or `ACCESS_NETWORK_STATE` permission. Both CI and the release
+  workflow dump the merged permissions of the built APK and fail if a network
+  permission ever appears.
 - No runtime third-party dependencies, native libraries, WebView, dynamic code,
-  IPC API, content provider, broadcast receiver, or deep link.
-- Backups are disabled; the only persisted data is button edge/Y position in
-  app-private `SharedPreferences`.
+  IPC API, content provider, broadcast receiver, or deep link. JUnit is a
+  test-only dependency and is not part of any shipped artifact.
+- Backups are disabled; the only persisted data is the button's edge and relative
+  vertical position in app-private `SharedPreferences`.
 - Cleartext networking is denied as defense in depth.
 - The accessibility service is protected by Android's signature-level
   `BIND_ACCESSIBILITY_SERVICE` permission.
@@ -32,6 +34,14 @@ suitable for distribution. Never publish or broadly distribute either test build
 A production APK/AAB must be signed with a unique, user-controlled release key
 kept outside this repository and backed up securely. Do not commit keystores or
 passwords.
+
+The release signing configuration reads that key from a git-ignored
+`keystore.properties` or from `KEYDROP_KEYSTORE_*` environment variables, so no
+signing material enters the repository or the build logs. Publishing jobs pass
+`-PrequireReleaseSigning=true`, which fails the build outright when signing
+material is missing rather than emitting an unsigned artifact. The release
+workflow additionally runs `apksigner verify --print-certs` on the built APK.
+[RELEASING.md](RELEASING.md) covers key generation, backup, and Play App Signing.
 
 ## Residual test requirements
 

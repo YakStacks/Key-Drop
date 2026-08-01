@@ -3,13 +3,16 @@ package com.yakstacks.keydrop;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -36,22 +39,30 @@ public final class MainActivity extends Activity {
     }
 
     private void updateStatus() {
-        AccessibilityManager manager =
-                (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
-        List<AccessibilityServiceInfo> enabled = manager.getEnabledAccessibilityServiceList(
-                AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
-        boolean active = false;
-        for (AccessibilityServiceInfo info : enabled) {
-            if (info.getResolveInfo() != null
-                    && getPackageName().equals(info.getResolveInfo().serviceInfo.packageName)) {
-                active = true;
-                break;
-            }
-        }
+        boolean active = isKeyDropServiceEnabled();
         statusView.setText(active ? R.string.status_on : R.string.status_off);
         statusView.setBackgroundResource(active
                 ? R.drawable.status_background_on
                 : R.drawable.status_background_off);
+    }
+
+    private boolean isKeyDropServiceEnabled() {
+        AccessibilityManager manager =
+                (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (manager == null) return false;
+        List<AccessibilityServiceInfo> enabled = manager.getEnabledAccessibilityServiceList(
+                AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+        if (enabled == null) return false;
+        String serviceName = KeyDropAccessibilityService.class.getName();
+        for (AccessibilityServiceInfo info : enabled) {
+            ResolveInfo resolveInfo = info == null ? null : info.getResolveInfo();
+            if (resolveInfo == null || resolveInfo.serviceInfo == null) continue;
+            if (getPackageName().equals(resolveInfo.serviceInfo.packageName)
+                    && serviceName.equals(resolveInfo.serviceInfo.name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void requestAccessibilitySetup() {
@@ -90,10 +101,20 @@ public final class MainActivity extends Activity {
                 showAccessibilityDisclosure();
                 break;
             case OPEN_ACCESSIBILITY_SETTINGS:
-                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+                openAccessibilitySettings();
                 break;
             case STAY_IN_APP:
                 break;
+        }
+    }
+
+    private void openAccessibilitySettings() {
+        try {
+            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        } catch (ActivityNotFoundException exception) {
+            // Some OEM builds ship without the standard settings screen.
+            Toast.makeText(this, R.string.accessibility_settings_unavailable,
+                    Toast.LENGTH_LONG).show();
         }
     }
 }

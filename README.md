@@ -1,4 +1,4 @@
-# KeyDrop MVP
+# KeyDrop
 
 **Keep your keyboard. Add the button Android forgot.**
 
@@ -6,13 +6,14 @@ KeyDrop is a keyboard-agnostic Android utility. Its accessibility service watche
 for an input-method window, shows a draggable accessibility overlay, and dismisses
 the keyboard when the button is tapped.
 
-## MVP behavior
+## Behavior
 
 - Shows a floating button only while an input-method window is visible.
 - Re-checks keyboard visibility immediately before sending Android's global Back
   action, preventing stale-button taps from navigating away.
-- Saves the dragged overlay position locally.
 - Uses a compact 48dp high-contrast button that snaps to the nearest screen edge.
+- Saves the dragged position as an edge plus a fraction of the screen's vertical
+  travel, so it survives rotation, split screen, and display-size changes.
 - Removes the overlay before requesting keyboard dismissal for immediate feedback.
 - Includes an enablement status, setup guide, and test text field.
 - Requests no internet permission and does not collect or transmit data.
@@ -29,6 +30,21 @@ and non-debuggable while retaining the local test signature so it can update pri
 test installs. It must not be distributed as a production release; see
 [SECURITY.md](SECURITY.md).
 
+Unit tests cover the consent flow and the overlay geometry:
+
+```bash
+./gradlew testReleaseUnitTest
+```
+
+## Release
+
+Production builds are signed from a keystore that lives outside this repository, and
+publishing is driven by pushing a version tag. The full procedure — key creation, CI
+secrets, the pre-release device pass, and the Play Console declarations — is in
+[RELEASING.md](RELEASING.md). Store copy and graphics are in
+[docs/store-listing.md](docs/store-listing.md); regenerate the graphics with
+`python3 tools/generate_icons.py`.
+
 ## Enable
 
 1. Open KeyDrop.
@@ -37,7 +53,7 @@ test installs. It must not be distributed as a production release; see
 4. After agreeing, choose **KeyDrop floating button** and enable the service.
 5. Return to KeyDrop and tap the test field.
 
-Android requires a prominent accessibility warning because the MVP uses an
+Android requires a prominent accessibility warning because KeyDrop uses an
 accessibility overlay, interactive-window metadata, and the global Back action.
 KeyDrop requests window access only to identify `TYPE_INPUT_METHOD`; its code does
 not traverse view trees or read text. KeyDrop is declared as a general utility,
@@ -48,9 +64,12 @@ See [TESTING.md](TESTING.md) for device coverage and known limitations.
 ## Security and privacy
 
 KeyDrop has no runtime dependencies or network permission. Backups and cleartext
-traffic are disabled, and CI treats Android lint warnings as failures. See
+traffic are disabled, CI treats Android lint warnings as failures, and every release
+build is checked for network permissions before it can be published. See
 [SECURITY.md](SECURITY.md) for the threat model, signing requirements, and residual
 testing obligations, and [PRIVACY.md](PRIVACY.md) for the data-handling statement.
+
+Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

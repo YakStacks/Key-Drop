@@ -1,21 +1,22 @@
 package com.yakstacks.keydrop;
 
-public final class AccessibilityConsentFlowTest {
-    public static void main(String[] args) {
-        setupWithoutConsentShowsDisclosure();
-        agreeingRemembersConsentAndOpensSettings();
-        decliningDoesNotRememberConsentOrOpenSettings();
-        returningUserCanOpenSettingsWithoutAnotherPrompt();
-    }
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-    private static void setupWithoutConsentShowsDisclosure() {
+import org.junit.Test;
+
+public final class AccessibilityConsentFlowTest {
+    @Test
+    public void setupWithoutConsentShowsDisclosure() {
         AccessibilityConsentFlow.Action action =
                 AccessibilityConsentFlow.requestSetup(false);
 
         assertEquals(AccessibilityConsentFlow.Action.SHOW_DISCLOSURE, action);
     }
 
-    private static void agreeingRemembersConsentAndOpensSettings() {
+    @Test
+    public void agreeingRemembersConsentAndOpensSettings() {
         AccessibilityConsentFlow.ConsentResult result =
                 AccessibilityConsentFlow.respondToDisclosure(true);
 
@@ -24,7 +25,8 @@ public final class AccessibilityConsentFlowTest {
                 result.getAction());
     }
 
-    private static void decliningDoesNotRememberConsentOrOpenSettings() {
+    @Test
+    public void decliningDoesNotRememberConsentOrOpenSettings() {
         AccessibilityConsentFlow.ConsentResult result =
                 AccessibilityConsentFlow.respondToDisclosure(false);
 
@@ -32,28 +34,11 @@ public final class AccessibilityConsentFlowTest {
         assertEquals(AccessibilityConsentFlow.Action.STAY_IN_APP, result.getAction());
     }
 
-    private static void returningUserCanOpenSettingsWithoutAnotherPrompt() {
+    @Test
+    public void returningUserCanOpenSettingsWithoutAnotherPrompt() {
         AccessibilityConsentFlow.Action action =
                 AccessibilityConsentFlow.requestSetup(true);
 
         assertEquals(AccessibilityConsentFlow.Action.OPEN_ACCESSIBILITY_SETTINGS, action);
-    }
-
-    private static void assertEquals(Object expected, Object actual) {
-        if (!expected.equals(actual)) {
-            throw new AssertionError("Expected " + expected + " but was " + actual);
-        }
-    }
-
-    private static void assertTrue(boolean value) {
-        if (!value) {
-            throw new AssertionError("Expected true but was false");
-        }
-    }
-
-    private static void assertFalse(boolean value) {
-        if (value) {
-            throw new AssertionError("Expected false but was true");
-        }
     }
 }

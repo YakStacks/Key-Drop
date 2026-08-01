@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,7 +16,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: Check out source
@@ -27,14 +28,6 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Run accessibility consent tests
-        run: |
-          mkdir -p build/consent-tests
-          javac -d build/consent-tests \
-            app/src/main/java/com/yakstacks/keydrop/AccessibilityConsentFlow.java \
-            app/src/test/java/com/yakstacks/keydrop/AccessibilityConsentFlowTest.java
-          java -cp build/consent-tests com.yakstacks.keydrop.AccessibilityConsentFlowTest
-
       - name: Set up Android SDK
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
 
@@ -44,5 +37,22 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d # v4
 
-      - name: Verify hardened and release builds
-        run: ./gradlew --no-daemon lint assembleHardenedTest assembleRelease
+      - name: Run unit tests, lint, and release builds
+        run: >-
+          ./gradlew --no-daemon
+          testReleaseUnitTest lint assembleHardenedTest assembleRelease bundleRelease
+
+      - name: Verify the release APK ships no network permission
+        run: |
+          set -euo pipefail
+          apk=$(find app/build/outputs/apk/release -name '*.apk' -print -quit)
+          if [ -z "$apk" ]; then
+            echo "::error::No release APK was produced."
+            exit 1
+          fi
+          permissions=$("$ANDROID_HOME/build-tools/36.0.0/aapt2" dump permissions "$apk")
+          echo "$permissions"
+          if echo "$permissions" | grep -Eq 'android.permission.(INTERNET|ACCESS_NETWORK_STATE)'; then
+            echo "::error::The release APK requests a network permission."
+            exit 1
+          fi
