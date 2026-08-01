@@ -1,0 +1,3 @@
+Initial production release.
+
+Adds the movable, edge-snapping hide-keyboard button, explicit accessibility disclosure and consent, offline privacy policy, hardened release configuration, and privacy-focused defaults. KeyDrop has no internet permission, analytics, advertising, account, or cloud service.
