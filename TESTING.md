@@ -23,6 +23,10 @@ third-party keyboards. Use a `hardenedTest` build for the device pass.
 Also confirm the pre-release checks in step 4 of [RELEASING.md](RELEASING.md) before
 tagging a release.
 
+Record each release-candidate device pass in
+[docs/release-readiness.md](docs/release-readiness.md). A checked box without a device,
+Android version, keyboard, result, and tester is not release evidence.
+
 Known limitations:
 
 - Some OEMs do not expose the input method as an accessibility window reliably.

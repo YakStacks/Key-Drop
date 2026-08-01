@@ -41,7 +41,8 @@ keyPassword=…
 
 Relative paths in `storeFile` resolve from the repository root.
 
-**In CI**, add four repository secrets under *Settings → Secrets and variables → Actions*:
+**In CI**, add these repository secrets under
+*Settings → Secrets and variables → Actions*:
 
 | Secret | Value |
 | --- | --- |
@@ -49,6 +50,16 @@ Relative paths in `storeFile` resolve from the repository root.
 | `KEYDROP_KEYSTORE_PASSWORD` | keystore password |
 | `KEYDROP_KEY_ALIAS` | key alias (`keydrop`) |
 | `KEYDROP_KEY_PASSWORD` | key password |
+| `KEYDROP_UPLOAD_CERT_SHA256` | SHA-256 fingerprint of the upload certificate |
+
+Get the fingerprint with `keytool -list -v -keystore keydrop-release.jks -alias keydrop`.
+Copy the SHA-256 value exactly; the workflow accepts it with or without colons.
+
+Before adding the signing secrets, make the repository public or upgrade the organization
+to GitHub Team if possible. Then move the same secrets into a protected `production`
+environment, add `environment: production` to the release job, restrict deployment to
+version tags, and require a reviewer. GitHub Free does not provide environment secrets or
+reviewers for private repositories.
 
 The same values can be supplied to a local build as the environment variables
 `KEYDROP_KEYSTORE_FILE`, `KEYDROP_KEYSTORE_PASSWORD`, `KEYDROP_KEY_ALIAS`, and
@@ -89,10 +100,11 @@ git tag -a v1.0.0 -m "KeyDrop 1.0.0"
 git push origin v1.0.0
 ```
 
-The `Release` workflow then verifies the tag matches `versionName`, builds a signed AAB and
-APK, re-runs tests and lint, audits the APK's permissions and signature, and attaches the
-bundle, APK, and R8 `mapping.txt` to a GitHub release. A mismatched tag, a missing secret,
-or an unexpected permission fails the job before anything is published.
+The `Release` workflow then verifies the tagged commit belongs to `main`, verifies the tag
+matches `versionName`, builds a signed AAB and APK, re-runs tests and lint, audits the APK's
+permissions, verifies the exact upload-certificate fingerprint, and attaches the bundle,
+APK, and R8 `mapping.txt` to a GitHub release. A mismatched tag, missing secret, unexpected
+signer, or unexpected permission fails the job before anything is published.
 
 ## 6. Upload to Google Play
 
@@ -103,11 +115,12 @@ requires the following, and Play will not let a release out of review without th
   assets are in [docs/store-listing.md](docs/store-listing.md) and
   [docs/store/](docs/store/). Screenshots must be captured on a device; Play requires at
   least two phone screenshots (see the checklist in `docs/store-listing.md`).
-- **Privacy policy URL** — a publicly reachable page. [PRIVACY.md](PRIVACY.md) is the
-  source text; publish it (GitHub Pages or any static host) and paste the URL.
+- **Privacy policy URL** — publish [PRIVACY.md](PRIVACY.md) as a public, non-editable HTML
+  page and paste its URL. The same complete policy is available inside the app from the
+  **Privacy Policy** button.
 - **Data safety** — declare that no data is collected or shared. KeyDrop has no network
-  permission, so there is no transmission to disclose; the only stored value is the
-  button's position, kept on-device in app-private preferences.
+  permission, so there is no transmission to disclose. The button position and disclosure
+  consent state remain on-device in app-private preferences.
 - **Accessibility API declaration** — this is the one that gets utility apps rejected. Play
   requires apps that use `AccessibilityService` for a purpose other than assisting users
   with disabilities to justify the use and disclose it prominently. KeyDrop's justification:
@@ -120,6 +133,13 @@ requires the following, and Play will not let a release out of review without th
   **ads declaration** (contains no ads).
 - **App access** — no login is required; state that all functionality is available without
   an account.
+- **Developer contact** — use `James@yakstacks.com` for the required support and privacy
+  contact unless YakStacks designates a different monitored address before submission.
+
+For a personal Play developer account created after November 13, 2023, production access
+also requires a closed test with at least 12 testers opted in continuously for 14 days.
+Create the app in Play Console early so `com.yakstacks.keydrop` is registered under the
+verified YakStacks developer identity before wider distribution.
 
 Roll out through **internal testing → closed testing → production**, and start production at
 a staged percentage. The accessibility behaviour varies across OEM builds, so a staged

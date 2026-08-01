@@ -21,26 +21,37 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Java 17
-        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
           java-version: "17"
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4
 
       - name: Install Android SDK 36
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@0b6dd653ba04f4f93bf581ec31e66cbd7dcb644d # v4
+        uses: gradle/actions/setup-gradle@90ddb51e90a5fd9ba75f40cf85156b7b41bf76a3 # v6
+        with:
+          cache-provider: basic
 
-      - name: Check the tag matches the app version
+      - name: Check the release source and version
         run: |
           set -euo pipefail
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          release_commit=$(git rev-parse "${GITHUB_SHA}^{commit}")
+          if ! git merge-base --is-ancestor "$release_commit" origin/main; then
+            echo "::error::Release tag must point to a commit on main."
+            exit 1
+          fi
+
           tag="${GITHUB_REF_NAME}"
           version_name=$(sed -n "s/^[[:space:]]*versionName[[:space:]]*'\([^']*\)'.*/\1/p" \
             app/build.gradle | head -n 1)
@@ -72,17 +83,45 @@ jobs:
           testReleaseUnitTest lint bundleRelease assembleRelease
 
       - name: Audit the signed APK
+        env:
+          EXPECTED_CERT_SHA256: ${{ secrets.KEYDROP_UPLOAD_CERT_SHA256 }}
         run: |
           set -euo pipefail
           build_tools="$ANDROID_HOME/build-tools/36.0.0"
           apk=$(find app/build/outputs/apk/release -name '*.apk' -print -quit)
+          if [ -z "$apk" ]; then
+            echo "::error::No release APK was produced."
+            exit 1
+          fi
           permissions=$("$build_tools/aapt2" dump permissions "$apk")
           echo "$permissions"
           if echo "$permissions" | grep -Eq 'android.permission.(INTERNET|ACCESS_NETWORK_STATE)'; then
             echo "::error::The release APK requests a network permission."
             exit 1
           fi
-          "$build_tools/apksigner" verify --min-sdk-version 24 --print-certs "$apk"
+          signer_output=$("$build_tools/apksigner" verify \
+            --min-sdk-version 24 --print-certs "$apk")
+          echo "$signer_output"
+
+          if [ -z "${EXPECTED_CERT_SHA256:-}" ]; then
+            echo "::error::Secret KEYDROP_UPLOAD_CERT_SHA256 is not set. See RELEASING.md."
+            exit 1
+          fi
+          signer_count=$(printf '%s\n' "$signer_output" | \
+            grep -c '^Signer #[0-9][0-9]* certificate SHA-256 digest:' || true)
+          if [ "$signer_count" -ne 1 ]; then
+            echo "::error::Expected exactly one APK signer, found $signer_count."
+            exit 1
+          fi
+          actual_cert_sha256=$(printf '%s\n' "$signer_output" | \
+            sed -n 's/^Signer #1 certificate SHA-256 digest: //p' | \
+            tr -d '[:space:]:' | tr '[:lower:]' '[:upper:]')
+          expected_cert_sha256=$(printf '%s' "$EXPECTED_CERT_SHA256" | \
+            tr -d '[:space:]:' | tr '[:lower:]' '[:upper:]')
+          if [ "$actual_cert_sha256" != "$expected_cert_sha256" ]; then
+            echo "::error::Release APK was signed by an unexpected certificate."
+            exit 1
+          fi
 
       - name: Publish the release artifacts
         env:

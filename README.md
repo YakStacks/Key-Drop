@@ -60,6 +60,8 @@ not traverse view trees or read text. KeyDrop is declared as a general utility,
 not as a disability-focused accessibility tool.
 
 See [TESTING.md](TESTING.md) for device coverage and known limitations.
+The Play Console declaration text and recording plan are in
+[docs/accessibility-declaration.md](docs/accessibility-declaration.md).
 
 ## Security and privacy
 
@@ -68,6 +70,8 @@ traffic are disabled, CI treats Android lint warnings as failures, and every rel
 build is checked for network permissions before it can be published. See
 [SECURITY.md](SECURITY.md) for the threat model, signing requirements, and residual
 testing obligations, and [PRIVACY.md](PRIVACY.md) for the data-handling statement.
+Record production evidence in
+[docs/release-readiness.md](docs/release-readiness.md) before creating a release tag.
 
 Release notes are in [CHANGELOG.md](CHANGELOG.md).
 

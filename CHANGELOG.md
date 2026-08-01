@@ -15,7 +15,12 @@ fixes below; the rest of the work made it shippable.
   environment variables, with `-PrequireReleaseSigning=true` to make missing signing
   material a build failure.
 - Tag-triggered release workflow that builds a signed AAB and APK, audits the merged
-  permissions and the APK signature, and publishes the artifacts with the R8 mapping file.
+  permissions and exact upload-certificate fingerprint, rejects tags outside `main`, and
+  publishes the artifacts with the R8 mapping file.
+- Offline in-app privacy policy covering accessibility access, local preferences,
+  retention, deletion, and the YakStacks privacy contact.
+- Weekly Dependabot checks for Gradle and GitHub Actions dependencies.
+- Release-readiness checklist and Play Accessibility API declaration/video guide.
 - Adaptive launcher icon with a themed (monochrome) layer, round variant, and bitmap
   fallbacks for Android 7.0–8.0 launchers, plus Play Store icon and feature graphic.
 - JUnit unit tests run by Gradle, covering the consent flow and overlay geometry.
