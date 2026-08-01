@@ -1,0 +1,16 @@
+KeyDrop adds a small, draggable button while the on-screen keyboard is visible. Tap the button to dismiss the keyboard without replacing the keyboard you already prefer.
+
+Features:
+
+* Works with any on-screen keyboard
+* Appears only while the keyboard is open
+* Snaps neatly to the nearest screen edge
+* Remembers its position across rotation and display changes
+* Requires no account and contains no advertising or analytics
+* Has no internet permission and does not collect or transmit data
+
+KeyDrop uses Android's Accessibility Service because Android does not otherwise allow a separate app to detect and dismiss the keyboard across other apps. It checks only for an input-method window and sends Android's standard Back action when you tap the button. It does not inspect screen contents, read text, capture screenshots, or monitor what you type.
+
+The accessibility service is optional, is enabled only after an in-app explanation and your consent, and can be disabled at any time in Android Settings.
+
+KeyDrop is a general-purpose utility and is not presented as an assistive tool for users with disabilities.

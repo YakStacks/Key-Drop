@@ -45,6 +45,10 @@ secrets, the pre-release device pass, and the Play Console declarations — is i
 [docs/store-listing.md](docs/store-listing.md); regenerate the graphics with
 `python3 tools/generate_icons.py`.
 
+F-Droid-compatible listing metadata is in `fastlane/metadata/android/en-US/`.
+The remaining public-release and screenshot work is tracked in
+[docs/distribution-readiness.md](docs/distribution-readiness.md).
+
 ## Enable
 
 1. Open KeyDrop.
