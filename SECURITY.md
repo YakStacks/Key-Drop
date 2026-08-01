@@ -39,8 +39,9 @@ The release signing configuration reads that key from a git-ignored
 `keystore.properties` or from `KEYDROP_KEYSTORE_*` environment variables, so no
 signing material enters the repository or the build logs. Publishing jobs pass
 `-PrequireReleaseSigning=true`, which fails the build outright when signing
-material is missing rather than emitting an unsigned artifact. The release
-workflow additionally runs `apksigner verify --print-certs` on the built APK.
+material is missing rather than emitting an unsigned artifact. CI proves both
+behaviours on every pull request with a throwaway key, and the release workflow
+runs `apksigner verify --print-certs` on the built APK.
 [RELEASING.md](RELEASING.md) covers key generation, backup, and Play App Signing.
 
 ## Residual test requirements

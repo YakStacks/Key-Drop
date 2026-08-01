@@ -56,3 +56,47 @@ jobs:
             echo "::error::The release APK requests a network permission."
             exit 1
           fi
+
+      # The two steps below exercise the release signing path on every pull request, so a
+      # broken signing configuration surfaces here rather than during an actual release tag.
+      - name: Verify the build refuses to produce an unsigned release when signing is required
+        run: |
+          set -euo pipefail
+          if ./gradlew --no-daemon -PrequireReleaseSigning=true -q help > "$RUNNER_TEMP/guard.log" 2>&1; then
+            echo "::error::-PrequireReleaseSigning=true succeeded without any signing material."
+            exit 1
+          fi
+          if ! grep -q 'Release signing was required' "$RUNNER_TEMP/guard.log"; then
+            echo "::error::The build failed for some reason other than the signing guard."
+            cat "$RUNNER_TEMP/guard.log"
+            exit 1
+          fi
+          echo "Signing guard rejected the build as expected."
+
+      - name: Verify the release signing configuration produces a signed APK
+        env:
+          # A throwaway key generated for this job only. It never signs anything that is
+          # published; real releases use the keystore secrets in the Release workflow.
+          KEYDROP_KEYSTORE_FILE: ${{ runner.temp }}/ci-throwaway.jks
+          KEYDROP_KEYSTORE_PASSWORD: ci-throwaway
+          KEYDROP_KEY_ALIAS: ci
+          KEYDROP_KEY_PASSWORD: ci-throwaway
+        run: |
+          set -euo pipefail
+          keytool -genkeypair -keystore "$KEYDROP_KEYSTORE_FILE" \
+            -storepass "$KEYDROP_KEYSTORE_PASSWORD" -keypass "$KEYDROP_KEY_PASSWORD" \
+            -alias "$KEYDROP_KEY_ALIAS" -keyalg RSA -keysize 2048 -validity 1 \
+            -dname "CN=KeyDrop CI throwaway, O=YakStacks, C=US"
+          ./gradlew --no-daemon -PrequireReleaseSigning=true assembleRelease bundleRelease
+          apk=$(find app/build/outputs/apk/release -name '*.apk' -print -quit)
+          certs=$("$ANDROID_HOME/build-tools/36.0.0/apksigner" verify \
+            --min-sdk-version 24 --print-certs "$apk")
+          echo "$certs"
+          if ! echo "$certs" | grep -q 'KeyDrop CI throwaway'; then
+            echo "::error::The APK was not signed by the configured release keystore."
+            exit 1
+          fi
+
+      - name: Remove the throwaway keystore
+        if: always()
+        run: rm -f "${RUNNER_TEMP}/ci-throwaway.jks"

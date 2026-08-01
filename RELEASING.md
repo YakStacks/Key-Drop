@@ -58,6 +58,11 @@ Without signing material the project still builds — `assembleRelease` simply p
 unsigned APK. Passing `-PrequireReleaseSigning=true` (as the release workflow does) turns a
 missing keystore into a build failure, so an unsigned artifact can never be published.
 
+CI exercises both halves of that on every pull request, using a throwaway key generated for
+the job: it asserts the guard rejects a build with no signing material, and that a build with
+signing material produces an APK signed by the configured keystore. A broken signing
+configuration therefore fails a pull request rather than a release tag.
+
 ## 3. Prepare the version
 
 1. Raise `versionCode` by one and set `versionName` in `app/build.gradle`. `versionCode`
