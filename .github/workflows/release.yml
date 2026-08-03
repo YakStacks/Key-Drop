@@ -18,6 +18,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment:
+      name: production
 
     steps:
       - name: Check out source
