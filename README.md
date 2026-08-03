@@ -75,7 +75,7 @@ build is checked for network permissions before it can be published. See
 [SECURITY.md](SECURITY.md) for the threat model, signing requirements, and residual
 testing obligations, and [PRIVACY.md](PRIVACY.md) for the data-handling statement. The
 public store-facing policy is published at
-[yakstacks.github.io/Key-Drop](https://yakstacks.github.io/Key-Drop/).
+[yakstacks.com/Key-Drop](https://yakstacks.com/Key-Drop/).
 Record production evidence in
 [docs/release-readiness.md](docs/release-readiness.md) before creating a release tag.
 

@@ -52,7 +52,7 @@ Upload certificate SHA-256: _record the public fingerprint_
 - [ ] The package name is registered to the verified YakStacks Play developer identity.
 - [ ] Any required 12-tester, 14-day closed test is complete.
 
-Privacy policy URL: https://yakstacks.github.io/Key-Drop/
+Privacy policy URL: https://yakstacks.com/Key-Drop/
 
 Accessibility demonstration video: _add URL_
 
