@@ -15,16 +15,15 @@ KeyDrop is a strong technical fit for F-Droid:
 - Gradle builds the app from the command line with JDK 17 and Android SDK 36.
 - Descriptions, icon, feature graphic, and version-code changelog use F-Droid's
   supported Fastlane layout.
+- The complete source history and distribution metadata are public on GitHub.
 
 Remaining before submission:
 
 1. Capture real phone screenshots and add them under
    `fastlane/metadata/android/en-US/images/phoneScreenshots/`.
-2. Make the GitHub repository public. F-Droid must be able to inspect and clone the
-   complete source history.
-3. Merge the distribution metadata into `main`, then tag that exact commit as
+2. Tag the final release commit as
    `v1.0.0`. F-Droid reads upstream metadata from release commits.
-4. Prepare and validate `metadata/com.yakstacks.keydrop.yml` in a fork of
+3. Prepare and validate `metadata/com.yakstacks.keydrop.yml` in a fork of
    `fdroid/fdroiddata`, then submit it as a New App merge request.
 
 F-Droid builds and signs its own APK by default, so Google Play account verification

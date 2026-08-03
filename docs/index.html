@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="KeyDrop privacy policy. KeyDrop collects and shares no user data.">
+  <title>KeyDrop Privacy Policy — YakStacks</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #080d1a;
+      --surface: #111a2f;
+      --surface-soft: #17233d;
+      --text: #f7f9ff;
+      --muted: #b8c3d9;
+      --accent: #61a8ff;
+      --border: #2b3c5e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #172b4d 0, var(--background) 38rem);
+      color: var(--text);
+      font: 17px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    main {
+      width: min(780px, calc(100% - 32px));
+      margin: 48px auto;
+      padding: clamp(24px, 5vw, 52px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .32);
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    header img {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+    }
+
+    h1, h2 { line-height: 1.2; }
+    h1 { margin: 0 0 4px; font-size: clamp(2rem, 6vw, 3rem); }
+    h2 { margin-top: 34px; font-size: 1.35rem; }
+    p, li { color: var(--muted); }
+    strong { color: var(--text); }
+
+    .eyebrow, .effective {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .summary {
+      padding: 18px 20px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 1.05rem;
+    }
+
+    a { color: #8bc1ff; }
+    a:hover { color: #b8d9ff; }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    @media (max-width: 520px) {
+      main { margin: 16px auto; }
+      header { grid-template-columns: 54px 1fr; gap: 14px; }
+      header img { width: 54px; height: 54px; border-radius: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="store/play-icon-512.png" alt="KeyDrop app icon" width="72" height="72">
+      <div>
+        <p class="eyebrow">YAKSTACKS</p>
+        <h1>KeyDrop privacy policy</h1>
+        <p class="effective">Effective August 1, 2026</p>
+      </div>
+    </header>
+
+    <p class="summary"><strong>KeyDrop collects and shares no user data.</strong> It has no internet permission, analytics, advertising, account, or cloud service.</p>
+
+    <p>KeyDrop is developed by <strong>YakStacks</strong>. This policy explains the limited on-device access KeyDrop needs to provide its hide-keyboard button and how its local settings are handled.</p>
+
+    <h2>Accessibility access</h2>
+    <p>Android requires <code>canRetrieveWindowContent="true"</code> before an accessibility service may call <code>getWindows()</code> or receive window-change events. KeyDrop uses that capability only to determine whether a window of type <code>TYPE_INPUT_METHOD</code> is present.</p>
+    <p>KeyDrop does not traverse accessibility node trees, inspect fields, read or store typed text, take screenshots, or record input. It subscribes only to window-state events, checks window types, and suppresses its overlay while the device is locked.</p>
+    <p>Before opening Android Accessibility Settings for the first time, KeyDrop shows a separate in-app disclosure explaining this access and asks the user to choose <strong>Agree</strong> or <strong>Not now</strong>. Choosing <strong>Not now</strong> opens no settings and grants no access.</p>
+
+    <h2>Information stored on the device</h2>
+    <p>KeyDrop stores only:</p>
+    <ul>
+      <li>the screen edge and relative vertical position of the floating button; and</li>
+      <li>whether the user accepted the accessibility disclosure.</li>
+    </ul>
+    <p>These preferences stay in the app's private storage and never leave the device.</p>
+
+    <h2>Collection and sharing</h2>
+    <p>KeyDrop has no internet or network-state permission, analytics, advertising SDK, user account, cloud component, WebView, or runtime third-party software. It does not collect, transmit, sell, or share user or device data.</p>
+
+    <h2>Retention and deletion</h2>
+    <p>Local preferences remain until the user clears KeyDrop's app storage or uninstalls KeyDrop. Either action deletes them. Because KeyDrop does not collect or transmit data, YakStacks has no server-side KeyDrop data to retain or delete.</p>
+
+    <h2>Security</h2>
+    <p>Android backups are disabled for KeyDrop, cleartext traffic is denied, and local preferences are stored in app-private storage. The accessibility service is guarded by Android's <code>BIND_ACCESSIBILITY_SERVICE</code> permission and can be disabled at any time in Android Settings.</p>
+
+    <h2>Children</h2>
+    <p>KeyDrop is a general-purpose utility and is not directed at children. It does not collect data from children or any other users.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If KeyDrop's data practices change, this policy and the in-app policy will be updated before the changed version is distributed.</p>
+
+    <h2>Contact</h2>
+    <p>Privacy questions may be sent to <a href="mailto:James@yakstacks.com">James@yakstacks.com</a>.</p>
+
+    <footer>
+      <span>Copyright © 2026 YakStacks.</span>
+      <span> View the <a href="https://github.com/YakStacks/Key-Drop">KeyDrop source code</a>.</span>
+    </footer>
+  </main>
+</body>
+</html>
