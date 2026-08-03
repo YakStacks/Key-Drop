@@ -18,10 +18,10 @@ CI run: _add URL_
 
 - [ ] The unique upload keystore has two secure backups outside the repository.
 - [ ] Play App Signing is enabled.
-- [ ] All five signing values are configured as repository secrets.
+- [ ] All five signing values are configured only as `production` environment secrets.
 - [ ] `KEYDROP_UPLOAD_CERT_SHA256` matches the backed-up upload key.
-- [ ] If the repository is public or on GitHub Team, the signing secrets are moved to a
-      protected `production` environment with a required reviewer.
+- [ ] The `production` environment is restricted to `v*` tags and requires manual approval
+      before releasing its signing secrets.
 
 Upload certificate SHA-256: _record the public fingerprint_
 

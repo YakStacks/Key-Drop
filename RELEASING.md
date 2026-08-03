@@ -41,8 +41,8 @@ keyPassword=…
 
 Relative paths in `storeFile` resolve from the repository root.
 
-**In CI**, add these repository secrets under
-*Settings → Secrets and variables → Actions*:
+**In CI**, add these environment secrets under
+*Settings → Environments → production*:
 
 | Secret | Value |
 | --- | --- |
@@ -55,11 +55,11 @@ Relative paths in `storeFile` resolve from the repository root.
 Get the fingerprint with `keytool -list -v -keystore keydrop-release.jks -alias keydrop`.
 Copy the SHA-256 value exactly; the workflow accepts it with or without colons.
 
-Before adding the signing secrets, make the repository public or upgrade the organization
-to GitHub Team if possible. Then move the same secrets into a protected `production`
-environment, add `environment: production` to the release job, restrict deployment to
-version tags, and require a reviewer. GitHub Free does not provide environment secrets or
-reviewers for private repositories.
+The repository's `production` environment is restricted to tags matching `v*` and requires
+manual approval from `junkyard22`. Self-review is intentionally allowed because YakStacks
+currently has one maintainer. The release job references this environment, so GitHub does
+not make the signing secrets available to the job until that approval is granted. Keep the
+five values in the environment only; do not duplicate them as repository secrets.
 
 The same values can be supplied to a local build as the environment variables
 `KEYDROP_KEYSTORE_FILE`, `KEYDROP_KEYSTORE_PASSWORD`, `KEYDROP_KEY_ALIAS`, and
@@ -105,6 +105,10 @@ matches `versionName`, builds a signed AAB and APK, re-runs tests and lint, audi
 permissions, verifies the exact upload-certificate fingerprint, and attaches the bundle,
 APK, and R8 `mapping.txt` to a GitHub release. A mismatched tag, missing secret, unexpected
 signer, or unexpected permission fails the job before anything is published.
+
+After the tag is pushed, open the workflow run and approve its `production` deployment.
+Review the tag and source commit before approving; the protected signing secrets are not
+released to the runner until that point.
 
 ## 6. Upload to Google Play
 
