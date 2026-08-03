@@ -14,3 +14,5 @@ KeyDrop uses Android's Accessibility Service because Android does not otherwise 
 The accessibility service is optional, is enabled only after an in-app explanation and your consent, and can be disabled at any time in Android Settings.
 
 KeyDrop is a general-purpose utility and is not presented as an assistive tool for users with disabilities.
+
+Open source under the Apache License 2.0.
