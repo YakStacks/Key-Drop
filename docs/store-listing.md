@@ -103,7 +103,7 @@ snapped to the right screen edge."
 
 ## Privacy policy URL
 
-Use `https://yakstacks.github.io/Key-Drop/` in Play Console after the GitHub Pages deployment
+Use `https://yakstacks.com/Key-Drop/` in Play Console after the GitHub Pages deployment
 has completed and the URL has been checked in a signed-out browser.
 
 ## Declarations
